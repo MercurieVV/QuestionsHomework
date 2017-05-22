@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+    }
+}
+
+group 'com.mercurievv.messaginghomework'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-configuration-processor'
+
+    compile("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.8.0'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.0'
+    compile("org.springframework.boot:spring-boot-starter-jetty")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.23.0.RELEASE'
+
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.16'
+
+
+    testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M4'
+    testCompile("org.springframework.boot:spring-boot-test:1.4.3.RELEASE")
+    testCompile("org.springframework.boot:spring-boot-starter-test:1.4.3.RELEASE"){
+        exclude module: "junit"
+    }
+
+    testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:1.1.2.RELEASE'
+    testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
+    testCompile group: 'com.jayway.restassured', name: 'spring-mock-mvc', version: '2.9.0'
+    testCompile group: 'org.springframework.restdocs', name: 'spring-restdocs-restassured', version: '1.1.2.RELEASE'
+}
