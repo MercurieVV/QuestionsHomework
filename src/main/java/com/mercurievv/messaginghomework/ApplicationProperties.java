@@ -19,6 +19,6 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @NoArgsConstructor(force = true)
-@AllArgsConstructor
+//@AllArgsConstructor
 public class ApplicationProperties {
 }

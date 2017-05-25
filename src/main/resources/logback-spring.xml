@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true">
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <logger name="com.mercurievv" level="DEBUG"/>
+
+    <logger name="org.eclipse.jetty" level="DEBUG"/>
+    <logger name="org.springframework.http" level="DEBUG"/>
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter" level="DEBUG"/>
+    <logger name="org.springframework.orm.jpa" level="DEBUG"/>
+    <logger name="org.springframework.transaction" level="INFO"/>
+    <logger name="org.springframework.web" level="INFO"/>
+    <logger name="org.springframework.data.rest.webmvc.json" level="DEBUG"/>
+    <logger name="org.springframework.security.authentication.dao.DaoAuthenticationProvider" level="DEBUG"/>
+
+    <logger name="com.querydsl" level="DEBUG"/>
+
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="org.hibernate.sql" level="DEBOG"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+
+    <logger name="com.fasterxml.jackson" level="INFO"/>
+    <logger name="javamelody" level="DEBUG"/>
+    <logger name="com.github.isrsal.logging" level="DEBUG"/>
+    <logger name="org.eclipse.jetty.servlets" level="DEBUG"/>
+
+    <!--<property name="profileName" value="${app.profileName}" />-->
+    <!--<include resource="logback-${profileName}.xml" />-->
+
+</configuration>

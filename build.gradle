@@ -21,10 +21,13 @@ targetCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     compile 'org.springframework.boot:spring-boot-configuration-processor'
+
+    compile group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
 
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
@@ -37,7 +40,9 @@ dependencies {
     compile group: 'org.springframework.hateoas', name: 'spring-hateoas', version: '0.23.0.RELEASE'
 
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.16'
+    compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
+    compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.0'
 
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M4'
     testCompile("org.springframework.boot:spring-boot-test:1.4.3.RELEASE")
@@ -49,4 +54,6 @@ dependencies {
     testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
     testCompile group: 'com.jayway.restassured', name: 'spring-mock-mvc', version: '2.9.0'
     testCompile group: 'org.springframework.restdocs', name: 'spring-restdocs-restassured', version: '1.1.2.RELEASE'
+
+    testCompile('com.github.sbrannen:spring-test-junit5:1.0.0.M4')
 }
