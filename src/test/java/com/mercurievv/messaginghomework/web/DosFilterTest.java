@@ -1,18 +1,11 @@
 package com.mercurievv.messaginghomework.web;
 
-import com.mercurievv.messaginghomework.FreeGeoIpApi;
-import org.junit.jupiter.api.DynamicTest;
+import com.mercurievv.messaginghomework.external.FreeGeoIpApi;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestFactory;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;

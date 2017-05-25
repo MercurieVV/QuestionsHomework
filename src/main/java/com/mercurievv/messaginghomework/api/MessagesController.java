@@ -1,4 +1,4 @@
-package com.mercurievv.messaginghomework;
+package com.mercurievv.messaginghomework.api;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
