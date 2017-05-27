@@ -5,7 +5,12 @@ buildscript {
 
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.2.RELEASE")
+        classpath group: 'com.h2database', name: 'h2', version: '1.4.195'
+        classpath 'com.querydsl:querydsl-sql-codegen:4.1.4'
     }
+}
+plugins {
+    id 'org.liquibase.gradle' version '1.2.4'
 }
 
 group 'com.mercurievv.messaginghomework'
@@ -17,6 +22,21 @@ apply plugin: 'org.springframework.boot'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+
+liquibase {
+    activities {
+        main {
+            changeLogFile 'liquibase/changelogs.xml'
+            url 'jdbc:h2:.\\messages'
+            username 'sa'
+        }
+    }
+}
+
+configurations {
+    querydsl
+}
 
 
 repositories {
@@ -42,6 +62,9 @@ dependencies {
     compile group: 'org.projectlombok', name: 'lombok', version: '1.16.16'
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
+    compile group: 'com.querydsl', name: 'querydsl-sql', version: '4.1.4'
+    querydsl group: 'com.h2database', name: 'h2', version: '1.4.195'
+
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.0'
 
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.0.0-M4'
@@ -57,3 +80,45 @@ dependencies {
 
     testCompile('com.github.sbrannen:spring-test-junit5:1.0.0.M4')
 }
+
+sourceSets {
+    main {
+        java {
+            srcDir "${project.buildDir}/generated/querydsl"
+        }
+    }
+}
+
+import com.querydsl.sql.codegen.DefaultNamingStrategy
+import com.querydsl.sql.codegen.MetaDataExporter
+import groovy.sql.Sql
+import org.h2.Driver
+
+import java.sql.DriverManager
+
+task generateQueryDSL(group: 'build') {
+    doLast{
+        // https://discuss.gradle.org/t/jdbc-driver-class-cannot-be-loaded-with-gradle-2-0-but-worked-with-1-12/2277
+        configurations.querydsl.files.each {
+            Sql.classLoader.addURL(it.toURI().toURL())
+        }
+
+        def driver = "org.h2.Driver"
+        DriverManager.registerDriver(Sql.classLoader.loadClass(driver).newInstance())
+        Class.forName(driver);
+        DriverManager.registerDriver(new Driver())
+        def connection = DriverManager.getConnection('jdbc:h2:.\\messages', 'sa', '')
+        def directory = new File("${project.buildDir}/generated/querydsl")
+
+//        source = sourceSets.main.java
+//        classpath = configurations.compile + configurations.querydslapt
+        MetaDataExporter exporter = new MetaDataExporter();
+        exporter.setPackageName("com.mercurievv.messaginghomework.db");
+        exporter.setTargetFolder(directory);
+        exporter.export(connection.getMetaData());
+    }
+ }
+
+compileJava.dependsOn generateQueryDSL
+
+
