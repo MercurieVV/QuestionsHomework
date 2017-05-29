@@ -41,6 +41,8 @@ class QuestionsControllerFunctionalTest extends BaseRestTest {
         Question[] questions = getObject("/questions", "", Question[].class);
         assertThat(questions).hasSize(1)
                 .extracting(input -> input.message).containsOnly("Gbl bbl?");
+        assertThat(questions[0].countryCode)
+                .isNotEmpty().isNotNull();
     }
 
     @Test

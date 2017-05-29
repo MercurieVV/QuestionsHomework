@@ -3,13 +3,14 @@ package com.mercurievv.messaginghomework.api;
 import com.mercurievv.messaginghomework.db.DbHelper;
 import com.mercurievv.messaginghomework.db.Questions;
 import com.mercurievv.messaginghomework.external.FreeGeoIpApi;
+import com.mercurievv.messaginghomework.web.CountryCodeResolver;
 import com.querydsl.core.QueryResults;
 import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.SQLQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,12 +26,12 @@ import static com.mercurievv.messaginghomework.db.QQuestions.*;
 @Controller
 public class QuestionsController {
     private final DbHelper dbHelper;
-    private final FreeGeoIpApi freeGeoIpApi;
+    private final CountryCodeResolver countryCodeResolver;
 
     @Autowired
-    public QuestionsController(DbHelper dbHelper, FreeGeoIpApi freeGeoIpApi) {
+    public QuestionsController(DbHelper dbHelper, CountryCodeResolver countryCodeResolver) {
         this.dbHelper = dbHelper;
-        this.freeGeoIpApi = freeGeoIpApi;
+        this.countryCodeResolver = countryCodeResolver;
     }
 
 
@@ -48,11 +49,12 @@ public class QuestionsController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/questions")
     @ResponseBody
-    public Question postQuestion(@RequestBody Question question){
+    public Question postQuestion(@RequestBody Question question, HttpServletRequest request){
+        String countryCode = countryCodeResolver.getCountryCodeByIpCached(request.getRemoteAddr());
         dbHelper.getQueryFactory()
                 .insert(questions)
                 .columns(questions.userName, questions.countryCode, questions.text)
-                .values(question.user, "", question.message)
+                .values(question.user, countryCode, question.message)
                 .execute();
         return question;
     }

@@ -17,22 +17,22 @@ import static org.mockito.Mockito.*;
  * Time: 11:56 PM
  * Contacts: email: mercurievvss@gmail.com Skype: 'grobokopytoff' or 'mercurievv'
  */
-class DosFilterTest {
+class CountryCodeResolverTest {
     private final FreeGeoIpApi freeGeoIpApiMock = mock(FreeGeoIpApi.class);
-    private DosFilter dosFilter = new DosFilter(freeGeoIpApiMock);
+    private CountryCodeResolver countryCodeResolver = new CountryCodeResolver(freeGeoIpApiMock);
 
     @Test
     void getCountryCodeByIp_found() {
         when(freeGeoIpApiMock.getCsv(any())).thenReturn("128.128.128.128,US,United States,CA,California,Mountain View,94035,America/Los_Angeles,37.3860,-122.0838,807");
 
-        assertThat(dosFilter.getCountryCodeByIp("")).isEqualTo("US");
+        assertThat(countryCodeResolver.getCountryCodeByIp("")).isEqualTo("US");
     }
 
     @Test
     void getCountryCodeByIp_notFound() {
         when(freeGeoIpApiMock.getCsv(any())).thenReturn("127.0.0.1,,,,,,,,0.0000,0.0000,0");
 
-        assertThat(dosFilter.getCountryCodeByIp("")).isEqualTo("LV");
+        assertThat(countryCodeResolver.getCountryCodeByIp("")).isEqualTo("LV");
     }
 
     @Test
@@ -42,10 +42,10 @@ class DosFilterTest {
 
         verify(freeGeoIpApiMock, times(0)).getCsv(any());
 
-        assertThat(dosFilter.getCountryCodeByIpCached("")).isEqualTo("US");
+        assertThat(countryCodeResolver.getCountryCodeByIpCached("")).isEqualTo("US");
         verify(freeGeoIpApiMock, times(1)).getCsv(any());
 
-        assertThat(dosFilter.getCountryCodeByIpCached("")).isEqualTo("US");
+        assertThat(countryCodeResolver.getCountryCodeByIpCached("")).isEqualTo("US");
         verify(freeGeoIpApiMock, times(1)).getCsv(any());
     }
 }
