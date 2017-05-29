@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 public class BaseRestTest {
     @Value("${local.server.port}")
     protected int port;
-    ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
     @SuppressWarnings("SpringAutowiredFieldsWarningInspection")
     @Autowired
     private WebApplicationContext context;
@@ -80,7 +80,7 @@ public class BaseRestTest {
     }
 
     @BeforeEach
-    void setUp() {
+    protected void setUp() {
         this.objectMapper = createObjectMapper();
         MockUtil mockUtil = new MockUtil();
         this.spec = new RequestSpecBuilder()

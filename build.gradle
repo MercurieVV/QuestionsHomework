@@ -63,6 +63,7 @@ dependencies {
     compile group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.2'
 
     compile group: 'com.querydsl', name: 'querydsl-sql', version: '4.1.4'
+    compile group: 'com.h2database', name: 'h2', version: '1.4.195'
     querydsl group: 'com.h2database', name: 'h2', version: '1.4.195'
 
     compile group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.1.0'
@@ -89,6 +90,8 @@ sourceSets {
     }
 }
 
+
+import com.querydsl.codegen.BeanSerializer
 import com.querydsl.sql.codegen.DefaultNamingStrategy
 import com.querydsl.sql.codegen.MetaDataExporter
 import groovy.sql.Sql
@@ -115,6 +118,7 @@ task generateQueryDSL(group: 'build') {
         MetaDataExporter exporter = new MetaDataExporter();
         exporter.setPackageName("com.mercurievv.messaginghomework.db");
         exporter.setTargetFolder(directory);
+        exporter.setBeanSerializerClass(BeanSerializer)
         exporter.export(connection.getMetaData());
     }
  }

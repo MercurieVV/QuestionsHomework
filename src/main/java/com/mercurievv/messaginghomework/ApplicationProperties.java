@@ -15,10 +15,20 @@ import org.springframework.stereotype.Component;
  * Contacts: email: mercurievvss@gmail.com Skype: 'grobokopytoff' or 'mercurievv'
  */
 @Component
-@ConfigurationProperties(prefix="messaging")
+@ConfigurationProperties(prefix="app")
 @Getter
 @Setter
 @NoArgsConstructor(force = true)
 //@AllArgsConstructor
 public class ApplicationProperties {
+    private Db db;
+
+    @Getter
+    @Setter
+    @NoArgsConstructor(force = true)
+    public static class Db {
+        private String url;
+        private String user;
+        private String password;
+    }
 }
