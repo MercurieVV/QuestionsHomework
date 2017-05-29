@@ -23,12 +23,12 @@ import static com.mercurievv.messaginghomework.db.QQuestions.*;
  * Contacts: email: mercurievvss@gmail.com Skype: 'grobokopytoff' or 'mercurievv'
  */
 @Controller
-public class MessagesController {
+public class QuestionsController {
     private final DbHelper dbHelper;
     private final FreeGeoIpApi freeGeoIpApi;
 
     @Autowired
-    public MessagesController(DbHelper dbHelper, FreeGeoIpApi freeGeoIpApi) {
+    public QuestionsController(DbHelper dbHelper, FreeGeoIpApi freeGeoIpApi) {
         this.dbHelper = dbHelper;
         this.freeGeoIpApi = freeGeoIpApi;
     }

@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Contacts: email: mercurievvss@gmail.com Skype: 'grobokopytoff' or 'mercurievv'
  */
 @ExtendWith(SpringExtension.class)
-class MessagesControllerFunctionalTest extends BaseRestTest {
+class QuestionsControllerFunctionalTest extends BaseRestTest {
     @Autowired
     DbHelper dbHelper;
 
