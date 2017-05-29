@@ -1,6 +1,7 @@
 package com.mercurievv.messaginghomework.web;
 
-import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.mercurievv.messaginghomework.external.FreeGeoIpApi;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class CountryCodeResolver {
     private final FreeGeoIpApi freeGeoIpApi;
-    private ConcurrentMap<String, String> cache = new ConcurrentLinkedHashMap.Builder<String, String>()
-            .maximumWeightedCapacity(1000)
+    private Cache<String, String> cache = Caffeine.newBuilder()
+            .maximumSize(1000)
             .build();
 
     public CountryCodeResolver(FreeGeoIpApi freeGeoIpApi) {
@@ -25,7 +26,7 @@ public class CountryCodeResolver {
     }
 
     public String getCountryCodeByIpCached(String clientIp) {
-        return cache.computeIfAbsent(clientIp, s -> getCountryCodeByIp(clientIp));
+        return cache.get(clientIp, s -> getCountryCodeByIp(clientIp));
     }
 
     String getCountryCodeByIp(String clientIp) {

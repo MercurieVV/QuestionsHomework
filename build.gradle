@@ -47,7 +47,7 @@ repositories {
 dependencies {
     compile 'org.springframework.boot:spring-boot-configuration-processor'
 
-    compile group: 'com.googlecode.concurrentlinkedhashmap', name: 'concurrentlinkedhashmap-lru', version: '1.4.2'
+    compile 'com.github.ben-manes.caffeine:caffeine:2.5.2'
 
     compile("org.springframework.boot:spring-boot-starter-web") {
         exclude module: "spring-boot-starter-tomcat"
