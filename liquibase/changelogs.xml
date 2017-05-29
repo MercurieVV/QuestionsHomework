@@ -17,4 +17,8 @@
             <column name="country_code"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="2017-05-28_1" author="MercurieVV">
+        <renameColumn tableName="questions" oldColumnName="test" newColumnName="text"/>
+    </changeSet>
 </databaseChangeLog>
