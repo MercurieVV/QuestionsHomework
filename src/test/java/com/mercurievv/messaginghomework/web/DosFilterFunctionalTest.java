@@ -19,9 +19,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 class DosFilterFunctionalTest extends BaseRestTest {
     @Test
-    void testDos() {
+    void testDos() throws InterruptedException {
         TestObserver<Integer> testObserver = new TestObserver<>();
-        Observable.range(0, 6)
+        Observable.range(0, 8)
                 .observeOn(Schedulers.newThread())
                 .map(integer -> given().get("/messages").statusCode())
                 .subscribe(testObserver);
@@ -30,5 +30,6 @@ class DosFilterFunctionalTest extends BaseRestTest {
         testObserver.assertNoErrors();
 
         assertThat(testObserver.values()).containsOnly(200, 429);
+        Thread.sleep(1000); //to not affect on another functional tests
     }
 }

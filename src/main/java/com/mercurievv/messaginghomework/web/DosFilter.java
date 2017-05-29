@@ -31,7 +31,7 @@ public class DosFilter extends DoSFilter {
 
     @Override
     public int getMaxRequestsPerSec() {
-        return 2;
+        return 5;
     }
 
     @Override
