@@ -1,5 +1,6 @@
 package com.mercurievv.messaginghomework.web;
 
+import com.mercurievv.messaginghomework.api.Question;
 import io.reactivex.Observable;
 import io.reactivex.observers.TestObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -19,11 +20,29 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(SpringExtension.class)
 class DosFilterFunctionalTest extends BaseRestTest {
     @Test
-    void testDos() throws InterruptedException {
+    void testDos_GET() throws InterruptedException {
         TestObserver<Integer> testObserver = new TestObserver<>();
         Observable.range(0, 8)
                 .observeOn(Schedulers.newThread())
-                .map(integer -> given().get("/messages").statusCode())
+                .map(integer -> given().get("/questions").statusCode())
+                .subscribe(testObserver);
+
+        testObserver.awaitTerminalEvent();
+        testObserver.assertNoErrors();
+
+        assertThat(testObserver.values()).containsOnly(200);
+        Thread.sleep(1000); //to not affect on another functional tests
+    }
+
+    @Test
+    void testDos_POST() throws InterruptedException {
+        TestObserver<Integer> testObserver = new TestObserver<>();
+        Observable.range(0, 8)
+                .observeOn(Schedulers.newThread())
+                .map(integer -> given()
+                        .body(objectMapper.writeValueAsString(new Question(null, "Vovec", null, "Gbl bbl?")))
+                        .post("/questions")
+                        .statusCode())
                 .subscribe(testObserver);
 
         testObserver.awaitTerminalEvent();
