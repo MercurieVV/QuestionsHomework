@@ -1,5 +1,7 @@
 package com.mercurievv.messaginghomework.api;
 
+import com.mercurievv.messaginghomework.api.validator.BlacklistedWordsError;
+import com.mercurievv.messaginghomework.api.validator.QuestionBlacklistValidator;
 import com.mercurievv.messaginghomework.db.DbHelper;
 import com.mercurievv.messaginghomework.db.Questions;
 import com.mercurievv.messaginghomework.web.CountryCodeResolver;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,9 +56,10 @@ public class QuestionsController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/questions")
     @ResponseBody
-    public ResponseEntity<Question> postQuestion(@RequestBody Question question, HttpServletRequest request){
-        if(!questionBlacklistValidator.isValid(question.message))
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+    public ResponseEntity postQuestion(@RequestBody Question question, HttpServletRequest request){
+        HashSet<String> blacklistedWords = questionBlacklistValidator.blacklistedWords(question.message);
+        if(!blacklistedWords.isEmpty())
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new BlacklistedWordsError(new ArrayList<>(blacklistedWords)));
         String countryCode = countryCodeResolver.getCountryCodeByIpCached(request.getRemoteAddr());
         dbHelper.getQueryFactory()
                 .insert(questions)
@@ -75,4 +80,5 @@ public class QuestionsController {
                 ))
                 .collect(Collectors.toList());
     }
+
 }

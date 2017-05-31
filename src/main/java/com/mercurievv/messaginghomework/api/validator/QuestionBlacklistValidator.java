@@ -1,4 +1,4 @@
-package com.mercurievv.messaginghomework.api;
+package com.mercurievv.messaginghomework.api.validator;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,10 @@ public class QuestionBlacklistValidator {
         blacklist = splitToWords(blacklistWordsList);
     }
 
-    public boolean isValid(String message) {
+    public HashSet<String> blacklistedWords(String message) {
         HashSet<String> wordsSet = splitToWords(message);
         wordsSet.retainAll(blacklist);
-        return wordsSet.isEmpty();
+        return wordsSet;
     }
 
     private HashSet<String> splitToWords(String message) {

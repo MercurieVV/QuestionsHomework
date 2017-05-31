@@ -1,10 +1,9 @@
-package com.mercurievv.messaginghomework.api;
+package com.mercurievv.messaginghomework.api.validator;
 
+import com.mercurievv.messaginghomework.api.Tuple2;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +31,7 @@ class QuestionBlacklistValidatorTest {
         )
                 .map(datum -> DynamicTest.dynamicTest(
                         "Testing " + datum,
-                        () -> assertThat(questionBlacklistValidator.isValid(datum.t1))
+                        () -> assertThat(questionBlacklistValidator.blacklistedWords(datum.t1))
                                 .isEqualTo(datum.t2)
                 ));
     }

@@ -3,6 +3,7 @@ package com.mercurievv.messaginghomework.api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mercurievv.messaginghomework.db.DbHelper;
 import com.mercurievv.messaginghomework.web.BaseRestTest;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,6 +44,13 @@ class QuestionsControllerFunctionalTest extends BaseRestTest {
                 .extracting(input -> input.message).containsOnly("Gbl bbl?");
         assertThat(questions[0].countryCode)
                 .isNotEmpty().isNotNull();
+    }
+    @Test
+    void postBlacklisted() throws JsonProcessingException {
+        post("/questions", objectMapper.writeValueAsString(
+                new Question(null, "Vovec", null, "la javascript ololo")
+        ))
+        .assertThat().statusCode(403).body("blacklistedWords", Matchers.contains("javascript"));
     }
 
     @Test
