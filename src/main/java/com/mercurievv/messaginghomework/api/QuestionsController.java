@@ -2,11 +2,12 @@ package com.mercurievv.messaginghomework.api;
 
 import com.mercurievv.messaginghomework.db.DbHelper;
 import com.mercurievv.messaginghomework.db.Questions;
-import com.mercurievv.messaginghomework.external.FreeGeoIpApi;
 import com.mercurievv.messaginghomework.web.CountryCodeResolver;
 import com.querydsl.core.QueryResults;
 import com.querydsl.sql.SQLQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +28,13 @@ import static com.mercurievv.messaginghomework.db.QQuestions.*;
 public class QuestionsController {
     private final DbHelper dbHelper;
     private final CountryCodeResolver countryCodeResolver;
+    private final QuestionBlacklistValidator questionBlacklistValidator;
 
     @Autowired
-    public QuestionsController(DbHelper dbHelper, CountryCodeResolver countryCodeResolver) {
+    public QuestionsController(DbHelper dbHelper, CountryCodeResolver countryCodeResolver, QuestionBlacklistValidator questionBlacklistValidator) {
         this.dbHelper = dbHelper;
         this.countryCodeResolver = countryCodeResolver;
+        this.questionBlacklistValidator = questionBlacklistValidator;
     }
 
 
@@ -49,14 +52,16 @@ public class QuestionsController {
 
     @RequestMapping(method = RequestMethod.POST, path = "/questions")
     @ResponseBody
-    public Question postQuestion(@RequestBody Question question, HttpServletRequest request){
+    public ResponseEntity<Question> postQuestion(@RequestBody Question question, HttpServletRequest request){
+        if(!questionBlacklistValidator.isValid(question.message))
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         String countryCode = countryCodeResolver.getCountryCodeByIpCached(request.getRemoteAddr());
         dbHelper.getQueryFactory()
                 .insert(questions)
                 .columns(questions.userName, questions.countryCode, questions.text)
                 .values(question.user, countryCode, question.message)
                 .execute();
-        return question;
+        return new ResponseEntity<>(question, HttpStatus.CREATED);
     }
 
     private List<Question> mapDbToWebResponse(QueryResults<Questions> results) {
